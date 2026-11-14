@@ -2,7 +2,7 @@
 
 **Disciplina:** Implantação de Tecnologia Blockchain — Engenharia de Software (EaD)
 **Aluno:** Gustavo Cardoso — Centro Universitário Salesiano — Vitória/ES
-**Elaborado:** 14/11/2026
+**Entrega:** 14/11/2026
 
 ---
 
@@ -77,18 +77,18 @@ Execução: `npx hardhat test`.
 
 ## Parte C — Implantação e relatório técnico
 
-### C.1 Dados da implantação (preencher após o deploy)
+### C.1 Dados da implantação
 
 | Item | Valor |
 |---|---|
 | Rede | Sepolia (testnet pública) |
-| Endereço do contrato | `<ENDERECO_DO_CONTRATO>` |
-| Link no Etherscan | `https://sepolia.etherscan.io/address/<ENDERECO_DO_CONTRATO>` |
-| Código verificado | Sim (`npx hardhat verify`) |
-| Tx de deploy | `<HASH_DA_TX_DE_DEPLOY>` |
-| Gas do deploy | `<GAS_USADO>` (esperado ≈ 788 mil, conforme medição local) |
-| Preço do gas no deploy | `<GWEI>` |
-| Custo do deploy (ETH de teste) | `<GAS_USADO × PREÇO>` |
+| Endereço do contrato | `0x740845c3A154B3B7603fbe9710A1233aD4F12656` |
+| Link no Etherscan | https://sepolia.etherscan.io/address/0x740845c3A154B3B7603fbe9710A1233aD4F12656#code |
+| Código verificado | Sim (`npx hardhat verify`, aba Contract com selo verde) |
+| Tx de deploy | `0xc723eba330fb854a3b5d2bb7ec8c005e7243750df27c72a916506df6621e3909` |
+| Gas do deploy | 5.352.938 |
+| Preço do gas no deploy | 1,0 gwei |
+| Custo do deploy (ETH de teste) | 0,005352938 ETH |
 | Tx de emissão (demo) | `<HASH_DA_TX_EMITIR>` |
 | Tx de revogação (demo) | `<HASH_DA_TX_REVOGAR>` |
 
@@ -104,7 +104,7 @@ Execução: `npx hardhat test`.
 
 ### C.3 Custos de gas
 
-Medição em rede local Hardhat (`npm run gas`), otimizador ligado:
+Medição em rede local Hardhat (`npm run gas`), otimizador ligado. **O deploy na Sepolia foi medido separadamente (ver C.1 e a análise abaixo).**
 
 | Operação | Gas |
 |---|---:|
@@ -119,7 +119,9 @@ Medição em rede local Hardhat (`npm run gas`), otimizador ligado:
 | aceitarPropriedade | 28.272 |
 | verificarCertificado | 0 (view) |
 
-**Análise.** A emissão em lote reduz o gas por certificado em cerca de 36% (de 119.595 para 76.310), porque a parte fixa da transação (21.000 de gas) é paga uma só vez. Custo em ETH = gas × preço do gas; como o preço varia a todo momento, os valores reais da Sepolia devem ser lidos nas transações no Etherscan e registrados na tabela C.1.
+**Análise.** A emissão em lote reduz o gas por certificado em cerca de 36% (de 119.595 para 76.310) na rede local, porque a parte fixa da transação (21.000 de gas) é paga uma só vez. Custo em ETH = gas × preço do gas; no deploy da Sepolia, 5.352.938 × 1,0 gwei = 0,005352938 ETH de teste.
+
+**Diferença entre rede local e Sepolia.** O deploy consumiu 788.308 de gas na rede local, mas 5.352.938 na Sepolia (cerca de 6,8 vezes mais), com o mesmo código-fonte (bytecode de 3.183 bytes). A explicação mais provável é a atualização Glamsterdam, já ativada na Sepolia: a EIP-8037 reajusta para cima o custo de criar estado novo na rede, o que inclui a implantação de contratos. A rede local do Hardhat ainda aplica os preços anteriores. O cronograma de ativação na mainnet deve ser conferido; enquanto a atualização não estiver ativa lá, o custo de deploy tende a ficar mais próximo do medido localmente. Consequência para o projeto: operações que gravam novos dados (emissão de certificados) também podem custar mais na Sepolia do que na tabela acima, e os valores de emissão e revogação da demo devem ser lidos nas transações do Etherscan (C.1).
 
 ### C.4 Modelo de governança
 
@@ -142,8 +144,15 @@ Medição em rede local Hardhat (`npm run gas`), otimizador ligado:
 - *Emissor malicioso* → remoção imediata via `removerEmissor` e revogação dos certificados emitidos.
 - *Documento legítimo emitido por engano* → revogação e nova emissão (histórico preservado).
 
----
+### Aspectos legais e regulatórios (base para a fala)
 
+- **LGPD (Lei 13.709/2018).** Dados na blockchain são praticamente impossíveis de apagar, o que conflita com o direito de eliminação. Mitigação por design: gravar apenas o hash, sem nome, CPF ou matrícula, de modo que o registro on-chain não identifica diretamente o titular. A relação entre hash e pessoa existe apenas no documento guardado off-chain pela instituição e pelo titular.
+- **Diploma digital e assinatura eletrônica.** A emissão oficial de diplomas no Brasil segue regras do MEC (Portaria MEC 554/2019) e usa certificados ICP-Brasil (MP 2.200-2/2001). A Lei 14.063/2020 trata dos tipos de assinatura eletrônica. O registro em blockchain **não substitui** esses requisitos; funciona como prova complementar de integridade e data.
+- **Valor probatório.** O hash comprova que o documento existia naquele momento e não foi alterado, mas não comprova por si só a identidade de quem o emitiu fora do contexto institucional; por isso o endereço oficial do contrato deve ser divulgado pela instituição.
+- **Marco legal dos criptoativos (Lei 14.478/2022).** O sistema não cria nem negocia token ou ativo virtual; usa a rede apenas para registro, o que afasta o enquadramento como prestação de serviços de ativos virtuais. O ETH é usado somente para pagar taxas de transação.
+- **Responsabilidade.** A instituição permanece responsável pelo conteúdo emitido e pela gestão das chaves; é necessária política interna de custódia e revogação.
+
+---
 
 ## Limitações e trabalhos futuros
 

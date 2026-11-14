@@ -2,7 +2,7 @@
 
 **Disciplina:** Implantação de Tecnologia Blockchain — Engenharia de Software (EaD)
 **Aluno:** Gustavo Cardoso — Centro Universitário Salesiano — Vitória/ES
-**Entrega:** 29/11/2026
+**Entrega:** 14/11/2026
 
 ---
 
@@ -143,20 +143,6 @@ Medição em rede local Hardhat (`npm run gas`), otimizador ligado. **O deploy n
 - *Perda ou roubo da chave do dono* → multisig e rotação de dono.
 - *Emissor malicioso* → remoção imediata via `removerEmissor` e revogação dos certificados emitidos.
 - *Documento legítimo emitido por engano* → revogação e nova emissão (histórico preservado).
-
----
-
-## Parte D — Demonstração de competência (roteiro do vídeo, 5 a 10 min)
-
-| Tempo | Conteúdo |
-|---|---|
-| 0:00–0:45 | Apresentação: nome, curso, problema dos certificados falsificáveis e a solução proposta |
-| 0:45–2:00 | Plataforma escolhida (Ethereum/Sepolia vs BSC) e modelo de dados |
-| 2:00–3:30 | Código: `emitirCertificado`, `verificarCertificado`, `revogarCertificado`; rodar `npx hardhat test` mostrando 17 testes passando |
-| 3:30–6:00 | **Demo na Sepolia:** abrir o contrato no Etherscan (código verificado); rodar `npm run demo` (antes da emissão → emitir → válido → revogar → inválido); mostrar as transações no Etherscan; adulterar um arquivo e mostrar que a verificação falha |
-| 6:00–7:30 | Governança: dono, emissores, não atualizável, multisig na produção; custos de gas |
-| 7:30–9:00 | Aspectos legais e regulatórios (resumo abaixo) |
-| 9:00–9:30 | Conclusão e limitações |
 
 ### Aspectos legais e regulatórios (base para a fala)
 
