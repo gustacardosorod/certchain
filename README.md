@@ -89,8 +89,7 @@ Execução: `npx hardhat test`.
 | Gas do deploy | 5.352.938 |
 | Preço do gas no deploy | 1,0 gwei |
 | Custo do deploy (ETH de teste) | 0,005352938 ETH |
-| Tx de emissão (demo) | `<HASH_DA_TX_EMITIR>` |
-| Tx de revogação (demo) | `<HASH_DA_TX_REVOGAR>` |
+
 
 ### C.2 Decisões de arquitetura
 
